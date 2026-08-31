@@ -1,0 +1,79 @@
+/**
+ * project.js - Manages central application and circuit state
+ */
+class ProjectState {
+    constructor() {
+        this.data = {
+            version: 1,
+            name: "Untitled Project",
+            board: "arduino-uno",
+            code: document.getElementById('code-editor') ? document.getElementById('code-editor').value : "",
+            components: [],
+            connections: [],
+            settings: {
+                zoom: 1.0,
+                panX: 0,
+                panY: 0
+            }
+        };
+        this.listeners = [];
+    }
+
+    getState() {
+        return this.data;
+    }
+
+    setState(newState) {
+        this.data = { ...this.data, ...newState };
+        this.notifyListeners();
+    }
+
+    subscribe(listener) {
+        this.listeners.push(listener);
+    }
+
+    notifyListeners() {
+        for (const listener of this.listeners) {
+            listener(this.data);
+        }
+    }
+
+    addComponent(component) {
+        this.data.components.push(component);
+        this.notifyListeners();
+    }
+
+    removeComponent(id) {
+        this.data.components = this.data.components.filter(c => c.id !== id);
+        this.data.connections = this.data.connections.filter(conn => conn.from.componentId !== id && conn.to.componentId !== id);
+        this.notifyListeners();
+    }
+
+    addConnection(connection) {
+        this.data.connections.push(connection);
+        this.notifyListeners();
+    }
+
+    removeConnection(connectionId) {
+        this.data.connections = this.data.connections.filter(conn => conn.id !== connectionId);
+        this.notifyListeners();
+    }
+
+    loadProject(jsonString) {
+        try {
+            const parsed = JSON.parse(jsonString);
+            this.data = parsed;
+            this.notifyListeners();
+            return true;
+        } catch (e) {
+            console.error("Failed to load project JSON:", e);
+            return false;
+        }
+    }
+
+    exportProject() {
+        return JSON.stringify(this.data, null, 2);
+    }
+}
+
+export const project = new ProjectState();
