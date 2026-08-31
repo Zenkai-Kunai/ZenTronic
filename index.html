@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Simulator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/simulator.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div id="app-container">
+        <header id="toolbar" class="toolbar-panel">
+            <div class="toolbar-group">
+                <button id="btn-new" title="New Project">New</button>
+                <button id="btn-open" title="Open Project">Open</button>
+                <button id="btn-save" title="Save Project">Save</button>
+            </div>
+            <div class="toolbar-group">
+                <button id="btn-run" class="success" title="Run Simulation">Run</button>
+                <button id="btn-stop" class="danger" title="Stop Simulation" disabled>Stop</button>
+                <button id="btn-pause" title="Pause Simulation" disabled>Pause</button>
+                <button id="btn-reset" title="Reset Simulation">Reset</button>
+                <button id="btn-upload" title="Compile & Upload Code">Upload</button>
+            </div>
+            <div class="toolbar-group">
+                <button id="btn-undo" title="Undo">Undo</button>
+                <button id="btn-redo" title="Redo">Redo</button>
+            </div>
+            <div class="toolbar-group zoom-group">
+                <button id="btn-zoom-in" title="Zoom In">+</button>
+                <button id="btn-zoom-out" title="Zoom Out">-</button>
+                <span id="zoom-level">100%</span>
+            </div>
+        </header>
+
+        <aside id="component-panel" class="sidebar-left">
+            <h3>Components</h3>
+            <div class="search-box">
+                <input type="text" id="component-search" placeholder="Search components...">
+            </div>
+            <div id="component-list" class="component-list-container">
+                </div>
+        </aside>
+
+        <main id="workspace" class="workspace-panel">
+            <div id="canvas-container">
+                <canvas id="circuit-canvas"></canvas>
+            </div>
+        </main>
+
+        <aside id="properties-panel" class="sidebar-right">
+            <h3>Properties</h3>
+            <div id="properties-content">
+                <p class="placeholder-text">Select a component to inspect properties.</p>
+            </div>
+        </aside>
+
+        <section id="bottom-panel" class="bottom-panel">
+            <div class="editor-pane">
+                <div class="pane-header">
+                    <span>Source Code (Arduino/C++)</span>
+                    <div class="pane-actions">
+                        <select id="mcu-select">
+                            <option value="arduino-uno">Arduino Uno</option>
+                            <option value="esp32">ESP32</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="code-editor-container">
+                    <textarea id="code-editor" spellcheck="false">// Arduino Sketch Example
+void setup() {
+    pinMode(13, OUTPUT);
+    Serial.begin(9600);
+}
+
+void loop() {
+    digitalWrite(13, HIGH);
+    Serial.println("LED ON");
+    delay(1000);
+    digitalWrite(13, LOW);
+    Serial.println("LED OFF");
+    delay(1000);
+}</textarea>
+                </div>
+            </div>
+            <div class="serial-pane">
+                <div class="pane-header">
+                    <span>Serial Monitor</span>
+                    <div class="pane-actions">
+                        <select id="baud-rate">
+                            <option value="9600">9600 baud</option>
+                            <option value="115200">115200 baud</option>
+                        </select>
+                        <button id="btn-clear-serial">Clear</button>
+                    </div>
+                </div>
+                <div id="serial-output" class="serial-output">
+                    <div class="log-line system">[System] Serial monitor initialized.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
